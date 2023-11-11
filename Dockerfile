@@ -1,6 +1,12 @@
-FROM golang:latest
+FROM golang:alpine as builder
 
-WORKDIR /usr/src/app
+WORKDIR /go/src/app
 
+COPY . .
 
-CMD ["echo", "Full Cycle Rocks!!"]
+RUN go build -o /app main.go
+
+FROM scratch
+
+COPY --from=builder /app /app
+CMD ["/app"]
